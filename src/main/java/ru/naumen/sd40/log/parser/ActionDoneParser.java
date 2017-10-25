@@ -43,7 +43,7 @@ public class ActionDoneParser
 
     private int searchActions = 0;
     
-    private int getCatalogsAction = 0;
+    private int CatalogsAction = 0;
 
     boolean nan = true;
 
@@ -114,7 +114,7 @@ public class ActionDoneParser
     
     public int getCatalogsAction()
     {
-    	return getCatalogsAction();
+    	return CatalogsAction;
     }
 
     public double getMax()
@@ -217,7 +217,7 @@ public class ActionDoneParser
             }
             else if (actionInLowerCase.matches("(?i)^([a-zA-Z]+|Get)[a-zA-Z]+Catalogs[a-zA-Z]+"))
             {
-                getCatalogsAction++;
+                CatalogsAction++;
             }
 
         }
