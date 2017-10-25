@@ -113,7 +113,7 @@
         <tbody >
             <% for(int i=0;i<times.length;i++) {%>
                 <tr class="row">
-                    <td class="col-xs-4" style="text-align:center;">
+                    <td class="col-xs-3" style="text-align:center;">
                        <%= new java.util.Date(times[i].longValue()).toString() %>
                     </td>
                     <td class="col-xs-1">
