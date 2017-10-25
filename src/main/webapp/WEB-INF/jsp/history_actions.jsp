@@ -301,7 +301,7 @@ var myChart = Highcharts.chart('actions-chart-container', {
                         }
 						
 						if(event.target.index==8){
-                            localStorage.setItem('catalogsActions', !series[8].visible);
+                            localStorage.setItem('catalogsAction', !series[8].visible);
                         }
                     }
                 }
