@@ -215,7 +215,7 @@ public class ActionDoneParser
             {
                 searchActions++;
             }
-            else if (actionInLowerCase.matches("(?i)^([a-zA-Z]+|Get)[a-zA-Z]+Catalogs[a-zA-Z]+"))
+            else if (actionInLowerCase.equals("getCatalogsAction"))
             {
                 CatalogsAction++;
             }
