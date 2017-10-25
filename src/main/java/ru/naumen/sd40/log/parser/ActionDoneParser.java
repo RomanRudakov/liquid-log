@@ -43,7 +43,7 @@ public class ActionDoneParser
 
     private int searchActions = 0;
     
-    private int CatalogsAction = 0;
+    private int CatalogsActions = 0;
 
     boolean nan = true;
 
@@ -112,9 +112,9 @@ public class ActionDoneParser
         return getFormActions;
     }
     
-    public int getCatalogsAction()
+    public int getCatalogsActions()
     {
-    	return CatalogsAction;
+    	return CatalogsActions;
     }
 
     public double getMax()
@@ -215,9 +215,9 @@ public class ActionDoneParser
             {
                 searchActions++;
             }
-            else if (actionInLowerCase.equals("getCatalogsAction"))
+            else if (actionInLowerCase.equals("getCatalogsActions"))
             {
-                CatalogsAction++;
+                CatalogsActions++;
             }
 
         }

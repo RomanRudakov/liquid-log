@@ -34,7 +34,7 @@
     Number search[] = (Number[])request.getAttribute(Constants.PerformedActions.SEARCH_ACTIONS);
     Number actionsSumm[] = (Number[])request.getAttribute(Constants.PerformedActions.ACTIONS_COUNT);
 	
-	Number catalogs[] = (Number[])request.getAttribute(Constants.PerformedActions.GET_CATALOGS_ACTION);
+	Number catalogs[] = (Number[])request.getAttribute(Constants.PerformedActions.GET_CATALOGS_ACTIONS);
     
     
   //Prepare links
@@ -206,8 +206,8 @@ if(localStorage.getItem('summary')==null){
     localStorage.setItem('summary', 'true');
 }
 
-if(localStorage.getItem('catalogsAction')==null){
-    localStorage.setItem('catalogsAction', 'true');
+if(localStorage.getItem('catalogsActions')==null){
+    localStorage.setItem('catalogsActions', 'true');
 
 var addVisible = localStorage.getItem('addActions')==='true';
 var editVisible = localStorage.getItem('editActions')==='true';
@@ -218,7 +218,7 @@ var dtosVisible = localStorage.getItem('dtObjectActions')==='true';
 var searchVisible = localStorage.getItem('searchActions')==='true';
 var summVisible = localStorage.getItem('summary')==='true';
 
-var	catalogsVisible = localStorage.getItem('catalogsAction')==='true';
+var	catalogsVisible = localStorage.getItem('catalogsActions')==='true';
 
 Highcharts.setOptions({
 	global: {
@@ -298,7 +298,7 @@ var myChart = Highcharts.chart('actions-chart-container', {
                         }
 						
                         if(event.target.index==7){
-                            localStorage.setItem('catalogsAction', !series[7].visible);
+                            localStorage.setItem('catalogsActions', !series[7].visible);
                         }
 						
 						if(event.target.index==8){
