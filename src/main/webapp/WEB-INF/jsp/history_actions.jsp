@@ -296,13 +296,15 @@ var myChart = Highcharts.chart('actions-chart-container', {
                         if(event.target.index==6){
                             localStorage.setItem('searchActions', !series[6].visible);
                         }
+						
                         if(event.target.index==7){
-                            localStorage.setItem('summary', !series[7].visible);
+                            localStorage.setItem('catalogsAction', !series[7].visible);
                         }
 						
 						if(event.target.index==8){
-                            localStorage.setItem('catalogsAction', !series[8].visible);
+                            localStorage.setItem('summary', !series[8].visible);
                         }
+		
                     }
                 }
             }
