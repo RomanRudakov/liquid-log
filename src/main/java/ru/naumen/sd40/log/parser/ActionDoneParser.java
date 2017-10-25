@@ -215,7 +215,7 @@ public class ActionDoneParser
             {
                 searchActions++;
             }
-            else if (actionInLowerCase.equals("getCatalogsActions"))
+            else if (actionInLowerCase.equals("getcatalogsactions"))
             {
                 CatalogsActions++;
             }
