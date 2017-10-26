@@ -33,7 +33,7 @@
     Number dtos[] = (Number[])request.getAttribute(Constants.PerformedActions.GET_DT_OBJECT_ACTIONS);
     Number search[] = (Number[])request.getAttribute(Constants.PerformedActions.SEARCH_ACTIONS);
     Number actionsSumm[] = (Number[])request.getAttribute(Constants.PerformedActions.ACTIONS_COUNT);
-	Number catalogAct[] = (Number[])request.getAttribute(Constants.PerformedActions.GET_CATALOGS_ACTIONS);
+	Number catalogsAct[] = (Number[])request.getAttribute(Constants.PerformedActions.GET_CATALOGS_ACTIONS);
     
     
   //Prepare links
