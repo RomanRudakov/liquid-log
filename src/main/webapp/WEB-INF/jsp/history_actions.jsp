@@ -33,8 +33,7 @@
     Number dtos[] = (Number[])request.getAttribute(Constants.PerformedActions.GET_DT_OBJECT_ACTIONS);
     Number search[] = (Number[])request.getAttribute(Constants.PerformedActions.SEARCH_ACTIONS);
     Number actionsSumm[] = (Number[])request.getAttribute(Constants.PerformedActions.ACTIONS_COUNT);
-	
-	Number catalogsAct[] = (Number[])request.getAttribute(Constants.PerformedActions.GET_CATALOGS_ACTIONS);
+	Number catalogAct[] = (Number[])request.getAttribute(Constants.PerformedActions.GET_CATALOGS_ACTIONS);
     
     
   //Prepare links
@@ -49,10 +48,7 @@
       
   	String params = "";
   	String datePath = "";
-
   	StringBuilder sb = new StringBuilder();
-
-
   	if(countParam != null){
       	params = sb.append("?count=").append(countParam).toString();
   	}else{
@@ -107,7 +103,6 @@
             <th class="col-xs-1">GetForm</th>
             <th class="col-xs-1">GetDtObject</th>
             <th class="col-xs-1">Search</th>
-			
 			<th class="col-xs-1">GetCatalogs</th>
         </thead>
         <tbody >
@@ -140,7 +135,6 @@
                     <td class="col-xs-1">
                         <%= search[i].intValue() %>
                     </td>
-					
 					<td class="col-xs-1">
                         <%= catalogsAct[i].intValue() %>
                     </td>
@@ -161,9 +155,7 @@ var form = [];
 var dtos = [];
 var search = [];
 var summ = [];
-
 var catalogs = [];
-
 <% for(int i=0;i<times.length;i++) {%>
     times.push((<%=times[i]%>));
     add.push([new Date(<%= times[i] %>), <%= add[i].intValue() %>]);
@@ -174,13 +166,9 @@ var catalogs = [];
     dtos.push([new Date(<%= times[i] %>), <%= dtos[i].intValue() %>]);
     search.push([new Date(<%= times[i] %>), <%= search[i].intValue() %>]);
     summ.push([new Date(<%= times[i] %>), <%= actionsSumm[i].intValue() %>]);
-	
 	catalogs.push([new Date(<%= times[i] %>), <%= catalogsAct[i].intValue() %>]);
-
 <% } %>
-
 document.getElementById('date_range').innerHTML += 'From: '+new Date(times[<%=times.length%>-1])+'<br/>To:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +new Date(times[0])
-
 if(localStorage.getItem('addActions')==null){
     localStorage.setItem('addActions', 'false');
 }
@@ -205,10 +193,9 @@ if(localStorage.getItem('searchActions')==null){
 if(localStorage.getItem('summary')==null){
     localStorage.setItem('summary', 'true');
 }
-
-if(localStorage.getItem('catalogsActions')==null){
-    localStorage.setItem('catalogsActions', 'true');
-
+if(localStorage.getItem('GetCatalogsAction')==null){
+    localStorage.setItem('GetCatalogsAction', 'true');
+}
 var addVisible = localStorage.getItem('addActions')==='true';
 var editVisible = localStorage.getItem('editActions')==='true';
 var listVisible = localStorage.getItem('listActions')==='true';
@@ -217,24 +204,19 @@ var	formVisible = localStorage.getItem('formActions')==='true';
 var dtosVisible = localStorage.getItem('dtObjectActions')==='true';
 var searchVisible = localStorage.getItem('searchActions')==='true';
 var summVisible = localStorage.getItem('summary')==='true';
-
-var	catalogsVisible = localStorage.getItem('catalogsActions')==='true';
-
+var catalogsVisible = localStorage.getItem('GetCatalogsAction')==='true';
 Highcharts.setOptions({
 	global: {
 		useUTC: false
 	}
 });
-
 var myChart = Highcharts.chart('actions-chart-container', {
         chart: {
                 zoomType: 'x,y'
             },
-
         title: {
             text: 'Performed actions'
         },
-
         tooltip: {
             formatter: function() {
                             var index = this.point.index;
@@ -243,7 +225,6 @@ var myChart = Highcharts.chart('actions-chart-container', {
                             + '<br/> <b>'+this.series.name+'</b> '+ this.y + ' times <br/>'
                         }
         },
-
         xAxis: {
             labels:{
                 formatter:function(obj){
@@ -254,7 +235,6 @@ var myChart = Highcharts.chart('actions-chart-container', {
                 },
                 reversed: true
         },
-
         yAxis: {
             title: {
                 text: 'Actions'
@@ -274,7 +254,6 @@ var myChart = Highcharts.chart('actions-chart-container', {
                     legendItemClick: function(event) {
                         var series = this.yAxis.series;
                         seriesLen = series.length;
-
                         if(event.target.index==0){
                             localStorage.setItem('addActions', !series[0].visible);
                         }
@@ -296,15 +275,12 @@ var myChart = Highcharts.chart('actions-chart-container', {
                         if(event.target.index==6){
                             localStorage.setItem('searchActions', !series[6].visible);
                         }
-						
                         if(event.target.index==7){
-                            localStorage.setItem('catalogsActions', !series[7].visible);
+                            localStorage.setItem('summary', !series[7].visible);
                         }
-						
 						if(event.target.index==8){
-                            localStorage.setItem('summary', !series[8].visible);
+                            localStorage.setItem('GetCatalogsAction', !series[8].visible);
                         }
-		
                     }
                 }
             }
@@ -357,7 +333,6 @@ var myChart = Highcharts.chart('actions-chart-container', {
             turboThreshold: 10000
         }]
 });
-
 </script>
 
 </body>
