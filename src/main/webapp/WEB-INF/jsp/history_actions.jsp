@@ -34,7 +34,7 @@
     Number search[] = (Number[])request.getAttribute(Constants.PerformedActions.SEARCH_ACTIONS);
     Number actionsSumm[] = (Number[])request.getAttribute(Constants.PerformedActions.ACTIONS_COUNT);
 	
-	Number catalogs[] = (Number[])request.getAttribute(Constants.PerformedActions.GET_CATALOGS_ACTIONS);
+	Number catalogsAct[] = (Number[])request.getAttribute(Constants.PerformedActions.GET_CATALOGS_ACTIONS);
     
     
   //Prepare links
@@ -142,7 +142,7 @@
                     </td>
 					
 					<td class="col-xs-1">
-                        <%= catalogs[i].intValue() %>
+                        <%= catalogsAct[i].intValue() %>
                     </td>
                 </tr>
             <% } %>
@@ -175,7 +175,7 @@ var catalogs = [];
     search.push([new Date(<%= times[i] %>), <%= search[i].intValue() %>]);
     summ.push([new Date(<%= times[i] %>), <%= actionsSumm[i].intValue() %>]);
 	
-	catalogs.push([new Date(<%= times[i] %>), <%= catalogs[i].intValue() %>]);
+	catalogs.push([new Date(<%= times[i] %>), <%= catalogsAct[i].intValue() %>]);
 
 <% } %>
 
