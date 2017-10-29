@@ -22,15 +22,13 @@ public class App
      * @throws IOException
      * @throws ParseException
      */
-    public static void main(String[] args) throws IOException, ParseException
+    public static void DoParser(String nameDB, String typePars, String pathLog, String timeZona, Boolean trace) throws IOException, ParseException
     {
-        String influxDb = null;
+        
+    	String influxDb = nameDB;
 
-        if (args.length > 1)
-        {
-            influxDb = args[1];
-            influxDb = influxDb.replaceAll("-", "_");
-        }
+        influxDb = influxDb.replaceAll("-", "_");
+        
 
         InfluxDAO storage = null;
         if (influxDb != null)
@@ -49,17 +47,16 @@ public class App
             points = storage.startBatchPoints(influxDb);
         }
 
-        String log = args[0];
+        String log = pathLog;
 
         HashMap<Long, DataSet> data = new HashMap<>();
 
         TimeParser timeParser = new TimeParser();
         GCTimeParser gcTime = new GCTimeParser();
-        if (args.length > 2)
-        {
-            timeParser = new TimeParser(args[2]);
-            gcTime = new GCTimeParser(args[2]);
-        }
+        
+        timeParser = new TimeParser(timeZona);
+        gcTime = new GCTimeParser(timeZona);
+        
 
         String mode = System.getProperty("parse.mode", "");
         switch (mode)
@@ -109,10 +106,9 @@ public class App
             break;
         case "top":
             TopParser topParser = new TopParser(log, data);
-            if (args.length > 2)
-            {
-                topParser.configureTimeZone(args[2]);
-            }
+            
+            topParser.configureTimeZone(timeZona);
+            
             //Parse top
             topParser.parse();
             break;
@@ -121,7 +117,7 @@ public class App
                     "Unknown parse mode! Availiable modes: sdng, gc, top. Requested mode: " + mode);
         }
 
-        if (System.getProperty("NoCsv") == null)
+        if (trace)
         {
             System.out.print("Timestamp;Actions;Min;Mean;Stddev;50%%;95%%;99%%;99.9%%;Max;Errors\n");
         }
@@ -131,7 +127,7 @@ public class App
             ActionDoneParser dones = set.getActionsDone();
             dones.calculate();
             ErrorParser erros = set.getErrors();
-            if (System.getProperty("NoCsv") == null)
+            if (trace)
             {
                 System.out.print(String.format("%d;%d;%f;%f;%f;%f;%f;%f;%f;%f;%d\n", k, dones.getCount(),
                         dones.getMin(), dones.getMean(), dones.getStddev(), dones.getPercent50(), dones.getPercent95(),

@@ -47,6 +47,13 @@
 	</div>
 	<br>
     <h1>Client list</h1>
+	
+	<div class="col-xs-6">
+	
+	    <a class="btn btn-success" href = "/parserLog">Parsing</a>
+		
+	</div>
+	
     <table class="table table-striped table-fixed"> <!-- table-bordered  -->
         <thead class="thead-inverse">
             <th class="col-xs-6">Name</th>
@@ -107,6 +114,7 @@
 		</div>
 	</div>
 </div>
+
 </body>
 
 </html>

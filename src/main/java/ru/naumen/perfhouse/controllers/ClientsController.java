@@ -84,7 +84,7 @@ public class ClientsController
             String data = IOUtils.toString(request.getInputStream(), "UTF-8");
             JSONObject measure = new JSONObject(data);
             influxDAO.storeFromJSon(null, client, measure);
-            response.sendError(HttpServletResponse.SC_OK);
+            response.sendError(HttpServletResponse.SC_OK);    
         }
         catch (Exception ex)
         {
