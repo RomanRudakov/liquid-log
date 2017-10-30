@@ -42,6 +42,8 @@ public class ActionDoneParser
     private int getDtObjectActions = 0;
 
     private int searchActions = 0;
+    
+    private int CatalogsActions = 0;
 
     boolean nan = true;
 
@@ -108,6 +110,11 @@ public class ActionDoneParser
     public int getFormActions()
     {
         return getFormActions;
+    }
+    
+    public int getCatalogsActions()
+    {
+    	return CatalogsActions;
     }
 
     public double getMax()
@@ -207,6 +214,10 @@ public class ActionDoneParser
             else if (actionInLowerCase.matches("(?i)[a-zA-Z]+search[a-zA-Z]+"))
             {
                 searchActions++;
+            }
+            else if (actionInLowerCase.equals("getcatalogsactions"))
+            {
+                CatalogsActions++;
             }
 
         }

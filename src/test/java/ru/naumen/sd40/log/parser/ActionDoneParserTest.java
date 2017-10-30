@@ -29,7 +29,7 @@ public class ActionDoneParserTest {
         //then
         Assert.assertEquals(2, parser.getFormActions());
     }
-
+    
     @Test
     public void mustParseEditObject() {
         //given
