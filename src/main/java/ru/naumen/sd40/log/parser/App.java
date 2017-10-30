@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import org.influxdb.dto.BatchPoints;
 
+import ru.naumen.perfhouse.influx.InfluxControl;
 import ru.naumen.perfhouse.influx.InfluxDAO;
 import ru.naumen.sd40.log.parser.GCParser.GCTimeParser;
 
@@ -33,8 +34,7 @@ public class App
         InfluxDAO storage = null;
         if (influxDb != null)
         {
-            storage = new InfluxDAO(System.getProperty("influx.host"), System.getProperty("influx.user"),
-                    System.getProperty("influx.password"));
+            storage = new InfluxDAO(InfluxControl.HOST, InfluxControl.USER, InfluxControl.PASSWORD);
             storage.init();
             storage.connectToDB(influxDb);
         }
@@ -58,7 +58,7 @@ public class App
         gcTime = new GCTimeParser(timeZona);
         
 
-        String mode = System.getProperty("parse.mode", "");
+        String mode = typePars;
         switch (mode)
         {
         case "sdng":
