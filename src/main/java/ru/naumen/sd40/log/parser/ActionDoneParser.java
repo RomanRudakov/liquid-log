@@ -1,5 +1,9 @@
 package ru.naumen.sd40.log.parser;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +16,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 /**
  * Created by doki on 22.10.16.
  */
-public class ActionDoneParser
+public class ActionDoneParser implements DataParser
 {
     private static Set<String> EXCLUDED_ACTIONS = new HashSet<>();
 
@@ -222,4 +226,28 @@ public class ActionDoneParser
 
         }
     }
+
+    public void parseData(TimeParserInterface timeParser, HashMap<Long, DataSet> data, String log) throws  IOException, ParseException
+    {
+    	 try (BufferedReader br = new BufferedReader(new FileReader(log), 32 * 1024 * 1024))
+         {
+             String line;
+             while ((line = br.readLine()) != null)
+             {
+                 long time = ((TimeParser)timeParser).parseTime(line);
+
+                 if (time == 0)
+                 {
+                     continue;
+                 }
+
+                 int min5 = 5 * 60 * 1000;
+                 long count = time / min5;
+                 long key = count * min5;
+
+                 data.computeIfAbsent(key, k -> new DataSet()).parseLine(line);
+             }
+         }
+    }
+
 }

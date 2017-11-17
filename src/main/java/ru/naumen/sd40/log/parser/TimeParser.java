@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * Created by doki on 22.10.16.
  */
-public class TimeParser
+public class TimeParser implements TimeParserInterface
 {
     private static final Pattern TIME_PATTERN = Pattern
             .compile("^\\d+ \\[.*?\\] \\((\\d{2} .{3} \\d{4} \\d{2}:\\d{2}:\\d{2},\\d{3})\\)");
@@ -28,7 +28,7 @@ public class TimeParser
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone(zoneId));
     }
 
-    public long parseLine(String line) throws ParseException
+    public long parseTime(String line) throws ParseException
     {
         Matcher matcher = TIME_PATTERN.matcher(line);
 

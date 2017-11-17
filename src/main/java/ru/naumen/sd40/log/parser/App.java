@@ -1,14 +1,11 @@
 package ru.naumen.sd40.log.parser;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 
 import org.influxdb.dto.BatchPoints;
 
-import ru.naumen.perfhouse.influx.InfluxControl;
 import ru.naumen.perfhouse.influx.InfluxDAO;
 import ru.naumen.sd40.log.parser.GCParser.GCTimeParser;
 
@@ -34,7 +31,8 @@ public class App
         InfluxDAO storage = null;
         if (influxDb != null)
         {
-            storage = new InfluxDAO(InfluxControl.HOST, InfluxControl.USER, InfluxControl.PASSWORD);
+            storage = new InfluxDAO(System.getProperty("influx.host"), System.getProperty("influx.user"),
+                    System.getProperty("influx.password"));
             storage.init();
             storage.connectToDB(influxDb);
         }
@@ -63,46 +61,17 @@ public class App
         {
         case "sdng":
             //Parse sdng
-            try (BufferedReader br = new BufferedReader(new FileReader(log), 32 * 1024 * 1024))
-            {
-                String line;
-                while ((line = br.readLine()) != null)
-                {
-                    long time = timeParser.parseLine(line);
-
-                    if (time == 0)
-                    {
-                        continue;
-                    }
-
-                    int min5 = 5 * 60 * 1000;
-                    long count = time / min5;
-                    long key = count * min5;
-
-                    data.computeIfAbsent(key, k -> new DataSet()).parseLine(line);
-                }
-            }
+        	{
+        		ActionDoneParser action = new ActionDoneParser();
+                action.parseData(timeParser, data, log);
+        	}
             break;
         case "gc":
             //Parse gc log
-            try (BufferedReader br = new BufferedReader(new FileReader(log)))
-            {
-                String line;
-                while ((line = br.readLine()) != null)
-                {
-                    long time = gcTime.parseTime(line);
-
-                    if (time == 0)
-                    {
-                        continue;
-                    }
-
-                    int min5 = 5 * 60 * 1000;
-                    long count = time / min5;
-                    long key = count * min5;
-                    data.computeIfAbsent(key, k -> new DataSet()).parseGcLine(line);
-                }
-            }
+        	{
+        		GCParser action = new GCParser();
+        		action.parseData(gcTime, data, log);
+        	}
             break;
         case "top":
             TopParser topParser = new TopParser(log, data);
