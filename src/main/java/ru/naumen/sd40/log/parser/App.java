@@ -1,5 +1,7 @@
 package ru.naumen.sd40.log.parser;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -48,43 +50,59 @@ public class App
         String log = pathLog;
 
         HashMap<Long, DataSet> data = new HashMap<>();
+       
+        TimeParserInterface timeParser;
+        DataParser dataParser;
 
-        TimeParser timeParser = new TimeParser();
-        GCTimeParser gcTime = new GCTimeParser();
-        
-        timeParser = new TimeParser(timeZona);
-        gcTime = new GCTimeParser(timeZona);
-        
-
-        String mode = typePars;
+        String mode = typePars;      
         switch (mode)
         {
         case "sdng":
             //Parse sdng
         	{
-        		ActionDoneParser action = new ActionDoneParser();
-                action.parseData(timeParser, data, log);
+        		timeParser = new TimeParser(timeZona);
+        		dataParser = new ActionDoneParser();
         	}
             break;
         case "gc":
             //Parse gc log
         	{
-        		GCParser action = new GCParser();
-        		action.parseData(gcTime, data, log);
+        		timeParser = new GCTimeParser(timeZona);
+        		dataParser = new GCParser();
         	}
             break;
         case "top":
-            TopParser topParser = new TopParser(log, data);
-            
-            topParser.configureTimeZone(timeZona);
-            
-            //Parse top
-            topParser.parse();
+        	{
+        		timeParser = new TopTimeParser(timeZona, log);
+        		dataParser = new TopParser();
+        	}
             break;
         default:
             throw new IllegalArgumentException(
                     "Unknown parse mode! Availiable modes: sdng, gc, top. Requested mode: " + mode);
         }
+      
+        try (BufferedReader br = new BufferedReader(new FileReader(log)))
+        {
+            String line;
+            while ((line = br.readLine()) != null)
+            {
+                long time = timeParser.parseTime(line);
+
+                if (time == 0)
+                {
+                    continue;
+                }
+
+                int min5 = 5 * 60 * 1000;
+                long count = time / min5;
+                long key = count * min5;
+
+               DataSet dataBase = data.computeIfAbsent(key, k -> new DataSet());
+               dataParser.parseData(dataBase, line);
+            }
+        }
+        
 
         if (trace)
         {
