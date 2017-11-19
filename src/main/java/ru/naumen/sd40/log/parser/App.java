@@ -61,7 +61,7 @@ public class App
             //Parse sdng
         	{
         		timeParser = new TimeParserImpl(timeZona);
-        		dataParser = new SdngParser();
+        		dataParser = new ComplexParser(new ErrorParser(), new ActionDoneParser());
         	}
             break;
         case "gc":
