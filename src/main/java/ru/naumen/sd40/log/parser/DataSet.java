@@ -17,9 +17,13 @@ public class DataSet
         gc = new GCParser();
     }
 
-    public void parseLine(String line)
+    public void parseLineError(String line)
     {
         errors.parseLine(line);
+    }
+    
+    public void parseLineAction(String line)
+    {
         actionsDone.parseLine(line);
     }
 

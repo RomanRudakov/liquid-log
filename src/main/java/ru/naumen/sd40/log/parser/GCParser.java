@@ -3,6 +3,7 @@ package ru.naumen.sd40.log.parser;
 import static ru.naumen.sd40.log.parser.NumberUtils.getSafeDouble;
 import static ru.naumen.sd40.log.parser.NumberUtils.roundToTwoPlaces;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,9 +14,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-public class GCParser
+public class GCParser implements DataParser
 {
-    public final static class GCTimeParser
+    public final static class GCTimeParser implements TimeParser
     {
         private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ",
                 new Locale("ru", "RU"));
@@ -76,5 +77,10 @@ public class GCParser
         {
             ds.addValue(Double.parseDouble(matcher.group(1).trim().replace(',', '.')));
         }
+    }
+    
+    public void parseData(DataSet data, String line) throws  IOException, ParseException
+    {
+    	data.parseGcLine(line); 
     }
 }

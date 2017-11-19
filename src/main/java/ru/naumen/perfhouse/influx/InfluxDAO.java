@@ -72,7 +72,7 @@ public class InfluxDAO
         this.influxHost = influxHost;
         this.user = user;
         this.password = password;
-    }
+    }    
 
     public void connectToDB(String dbName)
     {

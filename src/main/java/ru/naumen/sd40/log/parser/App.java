@@ -50,72 +50,59 @@ public class App
         String log = pathLog;
 
         HashMap<Long, DataSet> data = new HashMap<>();
+       
+        TimeParser timeParser;
+        DataParser dataParser;
 
-        TimeParser timeParser = new TimeParser();
-        GCTimeParser gcTime = new GCTimeParser();
-        
-        timeParser = new TimeParser(timeZona);
-        gcTime = new GCTimeParser(timeZona);
-        
-
-        String mode = System.getProperty("parse.mode", "");
+        String mode = typePars;      
         switch (mode)
         {
         case "sdng":
             //Parse sdng
-            try (BufferedReader br = new BufferedReader(new FileReader(log), 32 * 1024 * 1024))
-            {
-                String line;
-                while ((line = br.readLine()) != null)
-                {
-                    long time = timeParser.parseLine(line);
-
-                    if (time == 0)
-                    {
-                        continue;
-                    }
-
-                    int min5 = 5 * 60 * 1000;
-                    long count = time / min5;
-                    long key = count * min5;
-
-                    data.computeIfAbsent(key, k -> new DataSet()).parseLine(line);
-                }
-            }
+        	{
+        		timeParser = new TimeParserImpl(timeZona);
+        		dataParser = new ComplexParser(new ErrorParser(), new ActionDoneParser());
+        	}
             break;
         case "gc":
             //Parse gc log
-            try (BufferedReader br = new BufferedReader(new FileReader(log)))
-            {
-                String line;
-                while ((line = br.readLine()) != null)
-                {
-                    long time = gcTime.parseTime(line);
-
-                    if (time == 0)
-                    {
-                        continue;
-                    }
-
-                    int min5 = 5 * 60 * 1000;
-                    long count = time / min5;
-                    long key = count * min5;
-                    data.computeIfAbsent(key, k -> new DataSet()).parseGcLine(line);
-                }
-            }
+        	{
+        		timeParser = new GCTimeParser(timeZona);
+        		dataParser = new GCParser();
+        	}
             break;
         case "top":
-            TopParser topParser = new TopParser(log, data);
-            
-            topParser.configureTimeZone(timeZona);
-            
-            //Parse top
-            topParser.parse();
+        	{
+        		timeParser = new TopTimeParser(timeZona, log);
+        		dataParser = new TopParser();
+        	}
             break;
         default:
             throw new IllegalArgumentException(
                     "Unknown parse mode! Availiable modes: sdng, gc, top. Requested mode: " + mode);
         }
+      
+        try (BufferedReader br = new BufferedReader(new FileReader(log)))
+        {
+            String line;
+            while ((line = br.readLine()) != null)
+            {
+                long time = timeParser.parseTime(line);
+
+                if (time == 0)
+                {
+                    continue;
+                }
+
+                int min5 = 5 * 60 * 1000;
+                long count = time / min5;
+                long key = count * min5;
+
+               DataSet dataBase = data.computeIfAbsent(key, k -> new DataSet());
+               dataParser.parseData(dataBase, line);
+            }
+        }
+        
 
         if (trace)
         {

@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 /**
  * Created by doki on 22.10.16.
  */
-public class ErrorParser
+public class ErrorParser implements DataParser
 {
     long warnCount;
     long errorCount;
@@ -29,6 +29,11 @@ public class ErrorParser
         {
             fatalCount++;
         }
+    }
+    
+    public void parseData(DataSet data, String line)
+    {
+    	data.parseLineError(line);
     }
 
     public long getWarnCount()
