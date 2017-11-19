@@ -1,7 +1,5 @@
 package ru.naumen.sd40.log.parser;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,7 +12,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 /**
  * Created by doki on 22.10.16.
  */
-public class ActionDoneParser implements DataParser
+public class ActionDoneParser
 {
     private static Set<String> EXCLUDED_ACTIONS = new HashSet<>();
 
@@ -225,9 +223,5 @@ public class ActionDoneParser implements DataParser
         }
     }
 
-    public void parseData(DataSet data, String line) throws  IOException, ParseException
-    {
-    	data.parseLine(line);    
-    }
 
 }

@@ -6,7 +6,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TopTimeParser implements TimeParserInterface {
+public class TopTimeParser implements TimeParser {
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH:mm");
 	
@@ -14,7 +14,7 @@ public class TopTimeParser implements TimeParserInterface {
 	
 	private String dataDate;
 	
-	private long TIME = 0L;
+	private long time = 0L;
 	
 	public TopTimeParser(String timeZone, String file)
 	{
@@ -32,10 +32,10 @@ public class TopTimeParser implements TimeParserInterface {
         Matcher matcher = timeRegex.matcher(line);
         if (matcher.find())
         {
-            TIME = sdf.parse(dataDate + matcher.group(1)).getTime();
-            return TIME;
+            time = sdf.parse(dataDate + matcher.group(1)).getTime();
+            return time;
         }
-        return TIME;
+        return time;
 	}
 
 }

@@ -16,7 +16,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public class GCParser implements DataParser
 {
-    public final static class GCTimeParser implements TimeParserInterface
+    public final static class GCTimeParser implements TimeParser
     {
         private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ",
                 new Locale("ru", "RU"));

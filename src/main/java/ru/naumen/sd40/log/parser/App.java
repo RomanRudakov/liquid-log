@@ -51,7 +51,7 @@ public class App
 
         HashMap<Long, DataSet> data = new HashMap<>();
        
-        TimeParserInterface timeParser;
+        TimeParser timeParser;
         DataParser dataParser;
 
         String mode = typePars;      
@@ -60,8 +60,8 @@ public class App
         case "sdng":
             //Parse sdng
         	{
-        		timeParser = new TimeParser(timeZona);
-        		dataParser = new ActionDoneParser();
+        		timeParser = new TimeParserImpl(timeZona);
+        		dataParser = new SdngParser();
         	}
             break;
         case "gc":
