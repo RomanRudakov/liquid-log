@@ -3,17 +3,20 @@ package ru.naumen.sd40.log.parser;
 import org.influxdb.dto.BatchPoints;
 
 import ru.naumen.perfhouse.influx.InfluxDAO;
-import ru.naumen.perfhouse.influx.InfluxDAOImpl;
 
 public class SaveDataParser {
 	
 	private String influxDb;
-	private InfluxDAO influxDAO = new InfluxDAOImpl(System.getProperty("influx.host"), System.getProperty("influx.user"),
-          System.getProperty("influx.password"));
+	private InfluxDAO influxDAO;
 	private DataSet data;
 	private long currentKey;
 	private boolean trace;
 	private BatchPoints points;
+	
+	public SaveDataParser(InfluxDAO influxDAO)
+	{
+		this.influxDAO = influxDAO;
+	}
 	
 	
 	

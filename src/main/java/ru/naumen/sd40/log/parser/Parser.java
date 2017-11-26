@@ -7,6 +7,7 @@ import java.text.ParseException;
 
 import org.springframework.stereotype.Component;
 
+import ru.naumen.perfhouse.influx.InfluxDAOImpl;
 import ru.naumen.sd40.log.parser.GCParser.GCTimeParser;
 
 /**
@@ -23,7 +24,8 @@ public class Parser
      */
     public void DoParser(String nameDB, String typePars, String pathLog, String timeZona, Boolean trace) throws IOException, ParseException
     {
-    	SaveDataParser storage = new SaveDataParser();
+    	SaveDataParser storage = new SaveDataParser(new InfluxDAOImpl(System.getProperty("influx.host"), System.getProperty("influx.user"),
+    	          System.getProperty("influx.password")));
     	
         storage.connect(nameDB, trace);
         
