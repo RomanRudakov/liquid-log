@@ -2,9 +2,12 @@ package ru.naumen.sd40.log.parser;
 
 import java.util.regex.Pattern;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Created by doki on 22.10.16.
  */
+@Component
 public class ErrorParser implements DataParser
 {
     Pattern warnRegEx = Pattern.compile("^\\d+ \\[.+?\\] \\(.+?\\) WARN");

@@ -5,11 +5,14 @@ import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Top output parser
  * @author dkolmogortsev
  *
  */
+@Component
 public class TopParser implements DataParser
 {
 

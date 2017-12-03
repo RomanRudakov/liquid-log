@@ -5,9 +5,12 @@ import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Created by doki on 22.10.16.
  */
+@Component
 public class ActionDoneParser implements DataParser
 {
     

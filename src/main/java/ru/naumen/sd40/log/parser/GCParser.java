@@ -9,6 +9,9 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class GCParser implements DataParser
 {
     public final static class GCTimeParser implements TimeParser
