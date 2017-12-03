@@ -7,47 +7,27 @@ import java.util.regex.Pattern;
  */
 public class ErrorParser implements DataParser
 {
-    long warnCount;
-    long errorCount;
-    long fatalCount;
-
     Pattern warnRegEx = Pattern.compile("^\\d+ \\[.+?\\] \\(.+?\\) WARN");
     Pattern errorRegEx = Pattern.compile("^\\d+ \\[.+?\\] \\(.+?\\) ERROR");
     Pattern fatalRegEx = Pattern.compile("^\\d+ \\[.+?\\] \\(.+?\\) FATAL");
 
-    void parseLine(String line)
+    public void parseData(DataSet data, String line)
     {
+    	ErrorData errorData = data.getErrors();
+    	
         if (warnRegEx.matcher(line).find())
         {
-            warnCount++;
+            errorData.incrementWarnCount();
         }
         if (errorRegEx.matcher(line).find())
         {
-            errorCount++;
+            errorData.incrementErrorCount();
         }
         if (fatalRegEx.matcher(line).find())
         {
-            fatalCount++;
+            errorData.incrementFatalCount();
         }
     }
+
     
-    public void parseData(DataSet data, String line)
-    {
-    	data.parseLineError(line);
-    }
-
-    public long getWarnCount()
-    {
-        return warnCount;
-    }
-
-    public long getErrorCount()
-    {
-        return errorCount;
-    }
-
-    public long getFatalCount()
-    {
-        return fatalCount;
-    }
 }

@@ -65,32 +65,34 @@ public class SaveDataParserTest {
 	}
 	
 	@Test
-	public void saveActionErrorTest()
+	public void saveActionErrorTest() throws IOException, ParseException
 	{
 		//given
 		String line = "Done(10): AddObjectAction";
 		String error = "16088 [localhost-startStop-1 - -] (07 сен 2017 04:58:22,723) ERROR pool.PoolBase - dbConnectionPool - You cannot use the same pool name for separate pool instances./n";
+		DataParser dataParser = new ComplexParser(new ErrorParser(), new ActionDoneParser());
 		
 		//when
 		DataSet firstSet = saveData.get(1);
-		firstSet.parseLineAction(line);
-		firstSet.parseLineError(error);
+		dataParser.parseData(firstSet, error);
+		dataParser.parseData(firstSet, line);
 		saveData.get(2);
 		
 		//then
-		Mockito.verify(influxDAOMock).storeActionsFromLog(batchPoints, "test", 1, firstSet.getActionsDone(), firstSet.getErrors());
+		Mockito.verify(influxDAOMock).storeActionsFromLog(batchPoints, "test", 1, firstSet.getActionsData(), firstSet.getErrors());
 		
 	}
 	
 	@Test
-	public void saveGCTest()
+	public void saveGCTest() throws IOException, ParseException
 	{
 		//given
 		String line = "2017-11-03T10:41:03.724+0000: 6.549: [GC (Allocation Failure) [PSYoungGen: 655360K->58520K(764416K)] 655360K->58592K(2512384K), 0.0612895 secs] [Times: user=0.08 sys=0.01, real=0.06 secs]/n";
+		DataParser dataParser = new GCParser();
 		
 		//when
 		DataSet firstSet = saveData.get(1);
-		firstSet.parseGcLine(line);
+		dataParser.parseData(firstSet, line);
 		saveData.get(2);
 		
 		//then
