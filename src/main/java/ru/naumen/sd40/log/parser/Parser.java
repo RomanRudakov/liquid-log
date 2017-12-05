@@ -5,8 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ru.naumen.perfhouse.influx.InfluxDAO;
 import ru.naumen.perfhouse.influx.InfluxDAOImpl;
 import ru.naumen.sd40.log.parser.GCParser.GCTimeParser;
 
@@ -22,10 +24,25 @@ public class Parser
      * @throws IOException
      * @throws ParseException
      */
+	private InfluxDAO influxDAO;
+	private ActionDoneParser actionDone;
+	private ErrorParser errorParser;
+	private TopParser topParser;
+	private GCParser gcParser;
+	
+	@Autowired
+	public Parser(InfluxDAO influxDAO, ActionDoneParser actionDone, ErrorParser errorParser, TopParser topParser, GCParser gcParser)
+	{
+		this.influxDAO = influxDAO;
+		this.actionDone = actionDone;
+		this.errorParser = errorParser;
+		this.topParser = topParser;
+		this.gcParser = gcParser;
+	}
+	
     public void DoParser(String nameDB, String typePars, String pathLog, String timeZona, Boolean trace) throws IOException, ParseException
     {
-    	SaveDataParser storage = new SaveDataParser(new InfluxDAOImpl(System.getProperty("influx.host"), System.getProperty("influx.user"),
-    	          System.getProperty("influx.password")));
+    	SaveDataParser storage = new SaveDataParser(influxDAO);
     	
         storage.connect(nameDB, trace);
         
@@ -41,20 +58,20 @@ public class Parser
             //Parse sdng
         	{
         		timeParser = new TimeParserImpl(timeZona);
-        		dataParser = new ComplexParser(new ErrorParser(), new ActionDoneParser());
+        		dataParser = new ComplexParser(errorParser, actionDone);
         	}
             break;
         case "gc":
             //Parse gc log
         	{
         		timeParser = new GCTimeParser(timeZona);
-        		dataParser = new GCParser();
+        		dataParser = gcParser;
         	}
             break;
         case "top":
         	{
         		timeParser = new TopTimeParser(timeZona, log);
-        		dataParser = new TopParser();
+        		dataParser = topParser;
         	}
             break;
         default:

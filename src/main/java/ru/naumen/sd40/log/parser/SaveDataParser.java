@@ -42,9 +42,9 @@ public class SaveDataParser {
 		{
 			if (data != null)
 			{
-			 	ActionDoneParser dones = data.getActionsDone();
+			 	ActionDoneData dones = data.getActionsData();
 	            dones.calculate();
-	            ErrorParser erros = data.getErrors();
+	            ErrorData erros = data.getErrors();
 	            if (trace)
 	            {
 	                System.out.print(String.format("%d;%d;%f;%f;%f;%f;%f;%f;%f;%f;%d\n", currentKey, dones.getCount(),
@@ -56,7 +56,7 @@ public class SaveDataParser {
 	            	influxDAO.storeActionsFromLog(points, influxDb, currentKey, dones, erros);
 	            }
 
-	            GCParser gc = data.getGc();
+	            GCData gc = data.getGc();
 	            if (!gc.isNan())
 	            {
 	            	influxDAO.storeGc(points, influxDb, currentKey, gc);
