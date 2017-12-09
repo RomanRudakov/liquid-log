@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
  * Created by doki on 22.10.16.
  */
 @Component
-public class ErrorParser implements DataParser
+public class ErrorParser implements DataParser<SdngData>
 {
     Pattern warnRegEx = Pattern.compile("^\\d+ \\[.+?\\] \\(.+?\\) WARN");
     Pattern errorRegEx = Pattern.compile("^\\d+ \\[.+?\\] \\(.+?\\) ERROR");
     Pattern fatalRegEx = Pattern.compile("^\\d+ \\[.+?\\] \\(.+?\\) FATAL");
 
-    public void parseData(DataSet data, String line)
+    public void parseData(SdngData data, String line)
     {
     	ErrorData errorData = data.getErrors();
     	

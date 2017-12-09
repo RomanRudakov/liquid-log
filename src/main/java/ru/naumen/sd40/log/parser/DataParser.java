@@ -5,8 +5,8 @@ import java.text.ParseException;
 
 
 
-public interface DataParser {
+public interface DataParser<T extends DataSet> {
 	
-	public void parseData(DataSet data, String line) throws  IOException, ParseException;
+	public void parseData(T data, String line) throws  IOException, ParseException;
 
 }

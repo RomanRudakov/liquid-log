@@ -15,6 +15,9 @@ public class SaveDataParserTest {
 	private InfluxDAO influxDAOMock;
 	private SaveDataParser saveData;
 	private BatchPoints batchPoints;
+	private Saver saver;
+	private DataCreator creator;
+
 	
 	@Before
 	public void initSaveDataParserTest()
@@ -23,13 +26,19 @@ public class SaveDataParserTest {
 		batchPoints = BatchPoints.database("test").build();
 		Mockito.when(influxDAOMock.startBatchPoints("test")).thenReturn(batchPoints);
 		saveData = new SaveDataParser(influxDAOMock);
-		saveData.connect("test", false);
+		saver = Mockito.mock(Saver.class);
+		creator = Mockito.mock(DataCreator.class);
+		
+		Mockito.when(creator.getData()).thenReturn(new SdngData());
+		
+		saveData.connect("test", false, saver, creator);
 	}
 	
 	@Test
 	public void returnEqualsSetTest()
 	{
 		//given
+
 		
 		//when
 		DataSet firstSet = saveData.get(1);
@@ -70,7 +79,8 @@ public class SaveDataParserTest {
 		//given
 		String line = "Done(10): AddObjectAction";
 		String error = "16088 [localhost-startStop-1 - -] (07 сен 2017 04:58:22,723) ERROR pool.PoolBase - dbConnectionPool - You cannot use the same pool name for separate pool instances./n";
-		DataParser dataParser = new ComplexParser(new ErrorParser(), new ActionDoneParser());
+		DataParser dataParser = new SdngParser();
+		
 		
 		//when
 		DataSet firstSet = saveData.get(1);
@@ -79,7 +89,7 @@ public class SaveDataParserTest {
 		saveData.get(2);
 		
 		//then
-		Mockito.verify(influxDAOMock).storeActionsFromLog(batchPoints, "test", 1, firstSet.getActionsData(), firstSet.getErrors());
+		Mockito.verify(saver).save(firstSet, false, influxDAOMock, 1, "test", batchPoints);
 		
 	}
 	
@@ -89,6 +99,7 @@ public class SaveDataParserTest {
 		//given
 		String line = "2017-11-03T10:41:03.724+0000: 6.549: [GC (Allocation Failure) [PSYoungGen: 655360K->58520K(764416K)] 655360K->58592K(2512384K), 0.0612895 secs] [Times: user=0.08 sys=0.01, real=0.06 secs]/n";
 		DataParser dataParser = new GCParser();
+		Mockito.when(creator.getData()).thenReturn(new GCData());
 		
 		//when
 		DataSet firstSet = saveData.get(1);
@@ -96,7 +107,7 @@ public class SaveDataParserTest {
 		saveData.get(2);
 		
 		//then
-		Mockito.verify(influxDAOMock).storeGc(batchPoints, "test", 1, firstSet.getGc());
+		Mockito.verify(saver).save(firstSet, false, influxDAOMock, 1, "test", batchPoints);
 		
 	}
 	
@@ -106,6 +117,7 @@ public class SaveDataParserTest {
 		//given
 		String line = "18321 adminis+  20   0 4472716 3.214g      0  24476 S   0.0 83.3 281:56.26 java";
 		DataParser dataParser = new TopParser();
+		Mockito.when(creator.getData()).thenReturn(new TopData());
 		
 		//when
 		DataSet firstSet = saveData.get(1);
@@ -113,7 +125,7 @@ public class SaveDataParserTest {
 		saveData.get(2);
 		
 		//then
-		Mockito.verify(influxDAOMock).storeTop(batchPoints, "test", 1, firstSet.cpuData());
+		Mockito.verify(saver).save(firstSet, false, influxDAOMock, 1, "test", batchPoints);
 	}
 
 }
