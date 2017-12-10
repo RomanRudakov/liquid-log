@@ -24,8 +24,7 @@ public class Parser
      * @throws ParseException
      */
 	private InfluxDAO influxDAO;
-	private ActionDoneParser actionDone;
-	private ErrorParser errorParser;
+	private SdngParser sdngParser;
 	private TopParser topParser;
 	private GCParser gcParser;
 	private SdngSave sdngSave;
@@ -33,12 +32,11 @@ public class Parser
 	private TopSave topSave;
 	
 	@Autowired
-	public Parser(InfluxDAO influxDAO, ActionDoneParser actionDone, ErrorParser errorParser, TopParser topParser, GCParser gcParser, 
+	public Parser(InfluxDAO influxDAO, SdngParser sdngParser, TopParser topParser, GCParser gcParser, 
 				  SdngSave sdngSave, GCSave gcSave, TopSave topSave)
 	{
 		this.influxDAO = influxDAO;
-		this.actionDone = actionDone;
-		this.errorParser = errorParser;
+		this.sdngParser= sdngParser;
 		this.topParser = topParser;
 		this.gcParser = gcParser;
 		this.sdngSave = sdngSave;
@@ -67,7 +65,7 @@ public class Parser
         	{
         		dataCreate = new SdngCreator();
         		timeParser = new TimeParserImpl(timeZona);
-        		dataParser = new SdngParser();
+        		dataParser = sdngParser;
         		saver = sdngSave;
         	}
             break;
