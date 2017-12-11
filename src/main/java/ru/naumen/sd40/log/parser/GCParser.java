@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GCParser implements DataParser
+public class GCParser implements DataParser<GCData>
 {
     public final static class GCTimeParser implements TimeParser
     {
@@ -46,9 +46,8 @@ public class GCParser implements DataParser
 
     private Pattern gcExecutionTime = Pattern.compile(".*real=(.*)secs.*");
 
-    public void parseData(DataSet data, String line) throws  IOException, ParseException
+    public void parseData(GCData gcData, String line) throws  IOException, ParseException
     {
-    	GCData gcData = data.getGc();
     	
         Matcher matcher = gcExecutionTime.matcher(line);
         

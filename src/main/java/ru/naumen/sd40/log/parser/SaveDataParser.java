@@ -12,6 +12,8 @@ public class SaveDataParser {
 	private long currentKey;
 	private boolean trace;
 	private BatchPoints points;
+	private Saver<DataSet> saver;
+	private DataCreator dataCreator; 
 	
 	public SaveDataParser(InfluxDAO influxDAO)
 	{
@@ -20,7 +22,7 @@ public class SaveDataParser {
 	
 	
 	
-	public void connect(String nameDb, boolean trace)
+	public void connect(String nameDb, boolean trace, Saver<DataSet> saver, DataCreator dataCreator)
 	{
 		influxDb = nameDb.replaceAll("-", "_");
 		influxDAO.init();
@@ -32,6 +34,8 @@ public class SaveDataParser {
         }
         
         this.points = influxDAO.startBatchPoints(influxDb);
+        this.saver = saver;
+        this.dataCreator = dataCreator;
 	}
 	
 	
@@ -42,34 +46,10 @@ public class SaveDataParser {
 		{
 			if (data != null)
 			{
-			 	ActionDoneData dones = data.getActionsData();
-	            dones.calculate();
-	            ErrorData erros = data.getErrors();
-	            if (trace)
-	            {
-	                System.out.print(String.format("%d;%d;%f;%f;%f;%f;%f;%f;%f;%f;%d\n", currentKey, dones.getCount(),
-	                        dones.getMin(), dones.getMean(), dones.getStddev(), dones.getPercent50(), dones.getPercent95(),
-	                        dones.getPercent99(), dones.getPercent999(), dones.getMax(), erros.getErrorCount()));
-	            }
-	            if (!dones.isNan())
-	            {
-	            	influxDAO.storeActionsFromLog(points, influxDb, currentKey, dones, erros);
-	            }
-
-	            GCData gc = data.getGc();
-	            if (!gc.isNan())
-	            {
-	            	influxDAO.storeGc(points, influxDb, currentKey, gc);
-	            }
-
-	            TopData cpuData = data.cpuData();
-	            if (!cpuData.isNan())
-	            {
-	            	influxDAO.storeTop(points, influxDb, currentKey, cpuData);
-	            }
+			 	saver.save(data, trace, influxDAO, currentKey, influxDb, points);
 			 }
 	            currentKey = key;
-	            data = new DataSet();
+	            data = dataCreator.getData();
 		
 		}
 		return data;

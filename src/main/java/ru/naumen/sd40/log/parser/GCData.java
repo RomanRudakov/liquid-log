@@ -6,7 +6,7 @@ import static ru.naumen.sd40.log.parser.NumberUtils.roundToTwoPlaces;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-public class GCData {
+public class GCData implements DataSet {
 	
 	private DescriptiveStatistics ds = new DescriptiveStatistics();
 

@@ -10,7 +10,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;;
  * @author dkolmogortsev
  *
  */
-public class TopData
+public class TopData implements DataSet
 {
     private DescriptiveStatistics laStat = new DescriptiveStatistics();
     private DescriptiveStatistics cpuStat = new DescriptiveStatistics();

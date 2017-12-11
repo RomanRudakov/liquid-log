@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class TopParser implements DataParser
+public class TopParser implements DataParser<TopData>
 {
 
 
     private Pattern cpuAndMemPattren = Pattern
             .compile("^ *\\d+ \\S+ +\\S+ +\\S+ +\\S+ +\\S+ +\\S+ +\\S+ \\S+ +(\\S+) +(\\S+) +\\S+ java");
  
-    public void parseData(DataSet data, String line) throws IOException, ParseException
+    public void parseData(TopData data, String line) throws IOException, ParseException
     {
     	
         if (data != null)
@@ -29,7 +29,7 @@ public class TopParser implements DataParser
             Matcher la = Pattern.compile(".*load average:(.*)").matcher(line);
             if (la.find())
             {
-                data.cpuData().addLa(Double.parseDouble(la.group(1).split(",")[0].trim()));
+                data.addLa(Double.parseDouble(la.group(1).split(",")[0].trim()));
                 return;
             }
 
@@ -37,8 +37,8 @@ public class TopParser implements DataParser
             Matcher cpuAndMemMatcher = cpuAndMemPattren.matcher(line);
             if (cpuAndMemMatcher.find())
             {
-                data.cpuData().addCpu(Double.valueOf(cpuAndMemMatcher.group(1)));
-                data.cpuData().addMem(Double.valueOf(cpuAndMemMatcher.group(2)));
+                data.addCpu(Double.valueOf(cpuAndMemMatcher.group(1)));
+                data.addMem(Double.valueOf(cpuAndMemMatcher.group(2)));
                 return;
             }
         }

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-public class ActionDoneData {
+public class ActionDoneData implements DataSet{
 	
 	private static Set<String> EXCLUDED_ACTIONS = new HashSet<>();
 
@@ -212,5 +212,6 @@ public class ActionDoneData {
     {
     	CatalogsActions++;
     }
+    
 
 }

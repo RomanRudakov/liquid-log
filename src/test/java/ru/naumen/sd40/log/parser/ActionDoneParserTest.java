@@ -12,7 +12,7 @@ public class ActionDoneParserTest  {
     public void mustParseAddAction() throws IOException, ParseException {
         //given
         ActionDoneParser parser = new ActionDoneParser();
-        DataSet dataSet = new DataSet();
+        SdngData dataSet = new SdngData();
 
         //when
         parser.parseData(dataSet, "Done(10): AddObjectAction");
@@ -25,7 +25,7 @@ public class ActionDoneParserTest  {
     public void mustParseFormActions() throws IOException, ParseException {
         //given
         ActionDoneParser parser = new ActionDoneParser();
-        DataSet dataSet = new DataSet();
+        SdngData dataSet = new SdngData();
 
         //when
         parser.parseData(dataSet, "Done(10): GetFormAction");
@@ -39,7 +39,7 @@ public class ActionDoneParserTest  {
     public void mustParseEditObject() throws IOException, ParseException {
         //given
         ActionDoneParser parser=  new ActionDoneParser();
-        DataSet dataSet = new DataSet();
+        SdngData dataSet = new SdngData();
 
         //when
         parser.parseData(dataSet, "Done(10): EditObjectAction");
@@ -52,7 +52,7 @@ public class ActionDoneParserTest  {
     public void mustParseSearchObject() throws IOException, ParseException{
         //given
         ActionDoneParser parser = new ActionDoneParser();
-        DataSet dataSet = new DataSet();
+        SdngData dataSet = new SdngData();
 
         //when
         parser.parseData(dataSet, "Done(10): GetPossibleAgreementsChildsSearchAction");
@@ -71,7 +71,7 @@ public class ActionDoneParserTest  {
     public void mustParseGetList() throws IOException, ParseException{
         //given:
         ActionDoneParser parser=  new ActionDoneParser();
-        DataSet dataSet = new DataSet();
+        SdngData dataSet = new SdngData();
 
         //when:
         parser.parseData(dataSet,"Done(10): GetDtObjectListAction");
@@ -90,7 +90,7 @@ public class ActionDoneParserTest  {
     public void mustParseComment() throws IOException, ParseException{
         //given:
         ActionDoneParser parser=  new ActionDoneParser();
-        DataSet dataSet = new DataSet();
+        SdngData dataSet = new SdngData();
 
         //when:
         parser.parseData(dataSet,"Done(10): EditCommentAction");
@@ -108,7 +108,7 @@ public class ActionDoneParserTest  {
     public void mustParseDtObject() throws IOException, ParseException{
         //given:
         ActionDoneParser parser=  new ActionDoneParser();
-        DataSet dataSet = new DataSet();
+        SdngData dataSet = new SdngData();
 
         //when:
         parser.parseData(dataSet,"Done(10): GetVisibleDtObjectAction");

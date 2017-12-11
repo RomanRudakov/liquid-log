@@ -11,16 +11,16 @@ import org.springframework.stereotype.Component;
  * Created by doki on 22.10.16.
  */
 @Component
-public class ActionDoneParser implements DataParser
+public class ActionDoneParser implements DataParser<SdngData>
 {
     
     Pattern doneRegEx = Pattern.compile("Done\\((\\d+)\\): ?(.*?Action)");
 
-    public void parseData(DataSet data, String line) throws  IOException, ParseException
+    public void parseData(SdngData data, String line) throws  IOException, ParseException
     {
-    	
+    	ActionDoneData actionData = data.getActionsData();
         Matcher matcher = doneRegEx.matcher(line);
-        ActionDoneData actionData = data.getActionsData();
+        //ActionDoneData actionData = data.getData();
         
 
         if (matcher.find())

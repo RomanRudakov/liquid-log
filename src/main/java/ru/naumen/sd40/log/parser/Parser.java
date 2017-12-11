@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ru.naumen.perfhouse.influx.InfluxDAO;
-import ru.naumen.perfhouse.influx.InfluxDAOImpl;
 import ru.naumen.sd40.log.parser.GCParser.GCTimeParser;
 
 /**
@@ -25,31 +24,38 @@ public class Parser
      * @throws ParseException
      */
 	private InfluxDAO influxDAO;
-	private ActionDoneParser actionDone;
-	private ErrorParser errorParser;
+	private SdngParser sdngParser;
 	private TopParser topParser;
 	private GCParser gcParser;
+	private SdngSave sdngSave;
+	private GCSave gcSave;
+	private TopSave topSave;
 	
 	@Autowired
-	public Parser(InfluxDAO influxDAO, ActionDoneParser actionDone, ErrorParser errorParser, TopParser topParser, GCParser gcParser)
+	public Parser(InfluxDAO influxDAO, SdngParser sdngParser, TopParser topParser, GCParser gcParser, 
+				  SdngSave sdngSave, GCSave gcSave, TopSave topSave)
 	{
 		this.influxDAO = influxDAO;
-		this.actionDone = actionDone;
-		this.errorParser = errorParser;
+		this.sdngParser= sdngParser;
 		this.topParser = topParser;
 		this.gcParser = gcParser;
+		this.sdngSave = sdngSave;
+		this.gcSave = gcSave;
+		this.topSave = topSave;
 	}
 	
     public void DoParser(String nameDB, String typePars, String pathLog, String timeZona, Boolean trace) throws IOException, ParseException
     {
     	SaveDataParser storage = new SaveDataParser(influxDAO);
     	
-        storage.connect(nameDB, trace);
+        //storage.connect(nameDB, trace, );
         
         String log = pathLog;
        
+        DataCreator dataCreate;
         TimeParser timeParser;
         DataParser dataParser;
+        Saver saver;
 
         String mode = typePars;      
         switch (mode)
@@ -57,27 +63,35 @@ public class Parser
         case "sdng":
             //Parse sdng
         	{
+        		dataCreate = new SdngCreator();
         		timeParser = new TimeParserImpl(timeZona);
-        		dataParser = new ComplexParser(errorParser, actionDone);
+        		dataParser = sdngParser;
+        		saver = sdngSave;
         	}
             break;
         case "gc":
             //Parse gc log
         	{
+        		dataCreate = new GCDataCreator();
         		timeParser = new GCTimeParser(timeZona);
         		dataParser = gcParser;
+        		saver = gcSave;
         	}
             break;
         case "top":
         	{
+        		dataCreate = new TopDataCreator();
         		timeParser = new TopTimeParser(timeZona, log);
         		dataParser = topParser;
+        		saver = topSave;
         	}
             break;
         default:
             throw new IllegalArgumentException(
                     "Unknown parse mode! Availiable modes: sdng, gc, top. Requested mode: " + mode);
         }
+        
+        storage.connect(nameDB, trace, saver, dataCreate);
       
         try (BufferedReader br = new BufferedReader(new FileReader(log)))
         {
